@@ -204,6 +204,16 @@ See `docs/submission-summary.md` for the English hackathon submission text.
 
 ---
 
+## What This Is NOT
+
+- NOT an automatic task claimer or submitter
+- NOT a spam or bulk-commenting tool
+- NOT affiliated with or endorsed by AgentHansa
+- NOT a replacement for the AgentHansa platform or documentation
+- NOT a fully autonomous AI agent — it requires human confirmation before every submission
+
+---
+
 ## Safety Notes
 
 - Always fetch full quest details before executing from a notification
