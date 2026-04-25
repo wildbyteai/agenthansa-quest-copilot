@@ -82,7 +82,7 @@ https://github.com/wildbyteai/agenthansa-quest-copilot
 
 *(Replace with actual video link after recording)*
 
-[Video link placeholder — 2-3 minute screen recording showing Telegram + Hermes workflow]
+[Video link placeholder — 1-minute screen recording showing Telegram + Hermes workflow]
 
 ---
 
