@@ -4,13 +4,19 @@ Use these examples when running AgentHansa Quest Copilot in daily alliance work.
 
 The operator-facing workflow should be Chinese by default. Final deliverables should follow the language required by the quest.
 
+Hard rules:
+
+1. The agent never submits, resubmits, posts, comments, votes, uploads final proof, clicks final buttons, or calls submission APIs.
+2. The agent only prepares a manual submission package when every mandatory requirement is PASS.
+3. Any mandatory `FAIL` or `UNKNOWN` means `BLOCKED`.
+
 ## Short Quest Notification
 
 ```text
 按任务流程执行
 
-🆕 New Quest: $100.00
-Seed 3+ insight-first replies on AI-search hot threads (Topify) — curated list or your own finds
+New Quest: $100.00
+Seed 3+ insight-first replies on AI-search hot threads — curated list or your own finds
 Deadline: 2026-05-01
 ```
 
@@ -22,8 +28,10 @@ Expected behavior:
 4. Verify the fetched detail matches the notification.
 5. Extract must-have requirements, risks, and unknowns in Chinese.
 6. Decide whether to proceed.
-7. Continue execution only when the full requirements and proof requirements are clear enough.
-8. Stop at the user confirmation gate before submission.
+7. Continue drafting only when full requirements and proof requirements are clear enough.
+8. Run the 100% compliance check.
+9. Stop at a manual submission package if every mandatory requirement is PASS.
+10. Output `BLOCKED` if any mandatory requirement is `FAIL` or `UNKNOWN`.
 
 ## Full Quest Detail
 
@@ -39,9 +47,10 @@ Expected behavior:
 - Extract requirements in Chinese.
 - Create an execution plan.
 - Produce the deliverable in the quest-required language.
-- Run compliance self-check.
-- Prepare proof and final submission package.
-- Ask for explicit approval before submission.
+- Run the 100% compliance check.
+- Prepare proof plan.
+- Prepare a manual submission package only if every mandatory requirement is PASS.
+- Never execute submission.
 
 ## Submission Preparation
 
@@ -60,10 +69,12 @@ Proof URL:
 
 Expected behavior:
 
-- Review final package.
-- Check proof readiness.
+- Review the final content against every mandatory requirement.
+- Check proof readiness and accessibility.
 - Identify remaining risks.
-- Ask for the exact confirmation phrase `确认提交` before any mutating action.
+- Output a manual submission package only if every mandatory requirement is PASS.
+- If the user says `确认提交`, refresh manual submission guidance only.
+- Never perform any mutating action.
 
 ## Human Handoff
 
@@ -77,9 +88,10 @@ screenshot: ...
 Expected behavior:
 
 - Verify the provided evidence matches the quest requirements.
-- Update proof plan or proof document.
-- Re-run self-check.
-- Prepare final submission package.
+- Update proof plan.
+- Re-run the 100% compliance check.
+- Prepare a manual submission package only if every mandatory requirement is PASS.
+- Do not publish, upload, submit, or resubmit anything.
 
 ## Grade Feedback
 
@@ -92,5 +104,6 @@ Expected behavior:
 
 - Diagnose the failed requirement in Chinese.
 - Propose a revised proof or deliverable.
-- Prepare a new final package.
-- Stop before resubmission until the user approves.
+- Prepare a revised manual package only if every mandatory requirement becomes PASS.
+- Explain manual resubmission steps.
+- Never resubmit automatically.
