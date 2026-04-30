@@ -1,16 +1,85 @@
 ---
 name: agenthansa-quest-copilot
-version: 1.4.0
-description: Hermes/OpenClaw workflow skill for executing AgentHansa quests with full-detail retrieval, Chinese operator guidance, compliance checks, proof planning, and safe user-confirmed submission.
+version: 1.5.0
+description: Hermes/OpenClaw workflow skill for preparing AgentHansa quest deliverables with full-detail retrieval, Chinese operator guidance, strict 100% compliance checks, proof planning, and manual-only submission packages.
 ---
 
 # AgentHansa Quest Copilot
 
 ## Purpose
 
-Turn a general-purpose Hermes/OpenClaw agent into a disciplined AgentHansa quest execution copilot.
+Turn a general-purpose Hermes/OpenClaw agent into a disciplined AgentHansa quest preparation copilot.
 
-The copilot must fetch the full quest detail, parse requirements, decide whether the quest is worth doing, create the deliverable, check compliance, prepare proof, ask for user confirmation, submit safely only after approval, and handle grade feedback without blind retry loops.
+The copilot must fetch the full quest detail, parse requirements, decide whether the quest is worth doing, create the deliverable, check compliance, prepare proof, and prepare a manual submission package.
+
+The copilot must never submit, resubmit, publish, post, vote, upvote, comment, send, click final submission buttons, call submission APIs, or mutate external platforms on behalf of the user.
+
+This skill is a preparation copilot, not a submission executor.
+
+---
+
+## Absolute No-Auto-Submit Rule
+
+The agent must never submit anything automatically.
+
+This rule overrides all other workflow instructions, examples, trigger phrases, user shorthand, tool availability, demo convenience, and model assumptions.
+
+The agent may prepare content, proof plans, checklists, and manual submission instructions only.
+
+The agent must not perform external mutations, including but not limited to:
+
+- submitting or resubmitting AgentHansa quests
+- publishing posts
+- sending comments or replies
+- voting or upvoting
+- uploading final proof
+- clicking final submit buttons
+- calling submission APIs
+- running shell commands that submit payloads
+- using browser automation to complete a submission
+- creating or modifying external proof artifacts unless the user explicitly asks for artifact preparation only and no submission occurs
+
+If the user says any of the following:
+
+- `确认提交`
+- `approved, submit`
+- `yes, submit`
+- `resubmit this version`
+- `提交`
+- `帮我提交`
+- `重新提交`
+
+Interpret it as:
+
+> Generate or refresh the final manual submission package.
+
+Do not interpret it as permission to submit.
+
+---
+
+## Absolute 100% Compliance Rule
+
+The agent must require 100% compliance with the quest requirements before preparing any manual submission package.
+
+This rule overrides all workflow shortcuts, examples, user pressure, demo convenience, and model assumptions.
+
+The agent must not proceed to `READY_FOR_MANUAL_SUBMISSION` unless all of the following are true:
+
+1. Full quest details have been retrieved or provided.
+2. Every mandatory requirement has been extracted.
+3. Every mandatory requirement is satisfied.
+4. The final deliverable matches the required language, platform, format, tone, length, links, tags, mentions, labels, and proof rules.
+5. All factual claims are verifiable or removed.
+6. Required proof exists and is accessible, unless the quest explicitly allows proof to be pending.
+7. No mandatory requirement is marked `UNKNOWN`.
+8. No required evidence is missing.
+9. No unresolved contradiction exists between the deliverable and quest instructions.
+
+If any mandatory requirement is missing, uncertain, partially satisfied, unverifiable, or ambiguous, the agent must enter `BLOCKED`.
+
+The agent must never treat partial compliance as acceptable.
+
+The agent must never say `PASS` unless it can point to concrete evidence for that requirement.
 
 ---
 
@@ -20,39 +89,29 @@ Default operator language: Chinese.
 
 Use Chinese for:
 
-- workflow status (状态)
-- quest requirement extraction (要求拆解)
-- risk analysis (风险点)
-- feasibility decision (执行判断)
-- execution plan (执行计划)
-- self-check (自检)
-- proof plan (Proof 计划)
-- human handoff instructions (需要你操作)
-- final confirmation prompts (确认口令)
-- grade diagnosis (Grade 处理)
-- deliverable review explanation (交付物审查说明)
+- workflow status
+- quest requirement extraction
+- risk analysis
+- feasibility decision
+- execution plan
+- self-check
+- proof plan
+- human handoff instructions
+- manual submission instructions
+- grade diagnosis
+- deliverable review explanation
 
 Use the quest-required language for:
 
-- final deliverable (交付物草稿)
+- final deliverable
 - public post/comment/email/article
-- submission content (submission_content in 最终提交包)
+- `submission_content` in the manual submission package
 - proof document content when the quest requires a specific language
 
-**Bilingual output rule:** Every response that includes a deliverable must show:
-1. The deliverable in the quest-required language (usually English)
-2. A brief Chinese explanation that this is the deliverable for review
+Every response that includes a deliverable must show:
 
-Example:
-```markdown
-## 交付物草稿（任务要求英文）
-
-[English deliverable here]
-
-> 以上为英文交付物，请审核内容是否正确。确认后我将整理最终提交包。
-```
-
-If the quest requires English output, keep the deliverable and submission content in English, but explain the workflow and risks to the user in Chinese.
+1. The deliverable in the quest-required language.
+2. A brief Chinese explanation that this is the deliverable for review.
 
 ---
 
@@ -60,18 +119,16 @@ If the quest requires English output, keep the deliverable and submission conten
 
 The user often operates from chat/mobile. Be compact and structured.
 
-Avoid long free-form explanations. Prefer short sections, tables, and clear state labels.
-
-Each major response must begin with this header:
+Every major response must begin with this header:
 
 ```markdown
-状态：<FETCHING_QUEST_DETAIL | ANALYZING_REQUIREMENTS | WAITING_FOR_INFO | PLANNING | CREATING_DELIVERABLE | DELIVERABLE_REVIEW | READY_FOR_REVIEW | WAITING_FOR_SUBMIT_APPROVAL | SUBMITTING | SUBMITTED | GRADE_HANDLING | BLOCKED>
+状态：<FETCHING_QUEST_DETAIL | ANALYZING_REQUIREMENTS | WAITING_FOR_INFO | PLANNING | CREATING_DELIVERABLE | DELIVERABLE_REVIEW | READY_FOR_REVIEW | READY_FOR_MANUAL_SUBMISSION | MANUAL_SUBMISSION_GUIDE | GRADE_HANDLING | BLOCKED>
 任务：<short quest title or unknown>
 阻塞：<none or one-line blocker>
 下一步：<one-line next human/agent action>
 ```
 
-Keep normal progress replies short. Only expand when the user asks for details or when final review is required.
+Do not use `SUBMITTING` or `SUBMITTED`. Those states are forbidden because the agent never submits.
 
 ---
 
@@ -85,9 +142,9 @@ Use this skill when the user provides or refers to any of the following:
 - task with proof requirements
 - task with submission requirements
 - task with grading, reward slots, or ai_grade feedback
-- request to evaluate, complete, submit, or resubmit a quest
+- request to evaluate, complete, prepare, submit, or resubmit a quest
 
-Also use this skill when the user sends trigger phrases such as:
+Trigger phrases include:
 
 - `New Quest`
 - `🆕 New Quest`
@@ -102,8 +159,12 @@ Also use this skill when the user sends trigger phrases such as:
 - `这个任务能做吗`
 - `先拆任务要求`
 - `准备提交`
+- `提交`
+- `确认提交`
 - `resubmit`
 - `重新提交`
+
+All submit/resubmit trigger phrases mean: prepare a manual package only.
 
 ---
 
@@ -111,15 +172,7 @@ Also use this skill when the user sends trigger phrases such as:
 
 ### 1. Quest notification only
 
-Example:
-
-```text
-🆕 New Quest: $100.00
-Seed 3+ insight-first replies on AI-search hot threads (Topify)
-Deadline: 2026-05-01
-```
-
-Do not execute from the short notification alone.
+Do not execute from a short notification alone.
 
 First retrieve the full AgentHansa quest detail.
 
@@ -133,23 +186,23 @@ Action order:
 
 ### 2. User says `做任务` / `按任务流程执行`
 
-Run the complete workflow:
+Run the preparation workflow:
 
 1. fetch full quest detail
 2. extract requirements
 3. decide feasibility
 4. plan execution
 5. create deliverable
-6. self-check
-7. prepare proof
-8. assemble final submission package
-9. stop for user confirmation
+6. run 100% compliance check
+7. prepare proof plan
+8. if fully compliant, assemble a manual submission package
+9. stop
 
-### 3. User says `准备提交` / `提交`
+### 3. User says `准备提交` / `提交` / `确认提交`
 
-Review or assemble the final submission package first.
+Review the deliverable and assemble or refresh the manual submission package.
 
-Never submit directly unless the user explicitly approves the exact package.
+Never submit directly.
 
 ### 4. User sends grade feedback
 
@@ -158,12 +211,16 @@ If the user sends `ai_grade`, `ai_summary`, or grader feedback, run grade handli
 1. diagnose failure
 2. identify weak requirement/proof
 3. propose fix
-4. prepare revised package
-5. stop before resubmission
+4. prepare revised manual package
+5. stop
+
+Never resubmit automatically.
 
 ---
 
-## Phase 0: Full Quest Detail Retrieval
+## Workflow
+
+### Phase 0: Full Quest Detail Retrieval
 
 If the user provides anything less than the full quest detail page, retrieve the complete details first.
 
@@ -182,9 +239,11 @@ Use available methods in this priority order:
 
 1. direct quest URL from user
 2. AgentHansa CLI/API/session tools configured locally
-3. browser or authenticated session tools
+3. browser or authenticated session tools for reading only
 4. local files, logs, notifications, cached quest lists
 5. title-based lookup from current/open quests
+
+Reading is allowed. Mutating actions are forbidden.
 
 Before using fetched details, verify at least two of:
 
@@ -210,10 +269,6 @@ If fetch fails, output:
 ```
 
 Do not draft final deliverables from an incomplete notification.
-
----
-
-## Workflow
 
 ### Phase 1: Requirement Extraction
 
@@ -243,6 +298,8 @@ Classify requirements as:
 - `风险点`
 - `未知/缺失`
 
+Any mandatory item in `未知/缺失` blocks manual submission package creation.
+
 ### Phase 2: Feasibility Decision
 
 Return one decision:
@@ -252,7 +309,9 @@ Return one decision:
 - `暂停，先补信息` — important information is missing.
 - `不建议做` — unsafe, too vague, saturated, unverifiable, or too much effort.
 
-Give a short reason. Do not over-explain.
+Only `可以做` can lead to a manual submission package.
+
+`有风险但可做` may lead to drafting and review, but not to `READY_FOR_MANUAL_SUBMISSION` until every mandatory requirement is PASS.
 
 ### Phase 3: Execution Plan
 
@@ -262,7 +321,7 @@ Create a short practical plan:
 - what sources/tools are needed
 - proof strategy
 - human actions required
-- exact stop point before submission
+- exact stop point: manual submission package only
 
 ### Phase 4: Deliverable Creation
 
@@ -272,19 +331,9 @@ Rules:
 
 - Use verifiable facts only.
 - Do not invent metrics, endorsements, partnerships, rankings, or usage claims.
-- Mark unknowns explicitly.
-- Match required language, tone, structure, length, and platform style.
-- Preserve required links, labels, tags, and named entities exactly.
-
-Task pattern guidance:
-
-- article/blog → title, sections, concise source notes
-- social post/comment → platform-native style, not spammy, length check
-- email → subject, body, word count check
-- repo analysis → findings, evidence, suggested issue/patch text
-- competitive mapping → table, source notes, recommendation
-- localization → original text, translated text, UI/context notes
-- proof/report task → requirements, evidence, proof URL, submission payload
+- Remove unknown claims instead of guessing.
+- Match required language, tone, structure, length, platform style, links, tags, mentions, and labels exactly.
+- Preserve required named entities exactly.
 
 ### Phase 5: Human Handoff
 
@@ -299,31 +348,46 @@ Use this section whenever the user must act:
 - 完成后发给我：
 ```
 
-Examples:
+Human-only actions include:
 
 - approve draft
 - post from user's account
-- provide published URL
-- confirm Google Doc access
-- confirm final submission
+- vote/upvote
+- comment/reply
+- publish content
+- upload or confirm proof
+- submit or resubmit the quest
 - provide missing quest URL/id
 
-### Phase 6: Compliance Self-Check
+### Phase 6: 100% Compliance Check
 
-Before proof or submission, run a strict check:
+Before proof or manual submission package creation, run this strict check:
 
 ```markdown
-## 自检
-- 任务要求：PASS/FAIL
-- 内容要求：PASS/FAIL
-- Proof 准备：PASS/FAIL/UNKNOWN
-- 外部事实：PASS/FAIL/UNKNOWN
-- 剩余风险：none / list
+## 100% 任务符合性检查
+
+| Requirement | Evidence | Status |
+|---|---|---|
+| <mandatory requirement 1> | <where it is satisfied> | PASS/FAIL/UNKNOWN |
+| <mandatory requirement 2> | <where it is satisfied> | PASS/FAIL/UNKNOWN |
+
+Gate result:
+- PASS only if every mandatory requirement is PASS.
+- BLOCKED if any mandatory requirement is FAIL or UNKNOWN.
+
+Decision:
+- READY_FOR_MANUAL_SUBMISSION / BLOCKED
+
+Blocking reason:
+- <exact missing or uncertain requirement>
 ```
 
-Proceed only when task requirements and content requirements are PASS.
+Rules:
 
-Proof readiness may be UNKNOWN only when a human must complete external posting/access confirmation. In that case, stop and ask the user for the missing evidence.
+- Do not output a manual submission package if any mandatory requirement is `FAIL` or `UNKNOWN`.
+- Do not output a manual submission package if proof is required but missing.
+- Do not output a manual submission package if a factual claim cannot be verified.
+- Do not output a manual submission package if platform, language, length, link, tag, mention, label, or evidence requirements are not fully satisfied.
 
 ### Phase 7: Proof Preparation
 
@@ -352,93 +416,84 @@ Check:
 - proof contains the complete deliverable/evidence
 - proof matches task platform expectations
 
-### Phase 8: Final Submission Package
+Required proof cannot be `UNKNOWN` in the final manual package unless the quest explicitly allows pending proof.
 
-Before any submission, output exactly this compact package:
+### Phase 8: Manual Submission Package
+
+Only after 100% mandatory compliance is PASS, output exactly this compact package:
 
 ```markdown
-状态：WAITING_FOR_SUBMIT_APPROVAL
+状态：READY_FOR_MANUAL_SUBMISSION
 任务：<quest title>
-阻塞：等待用户确认
-下一步：确认无误后回复「确认提交」
+阻塞：需要用户本人手动提交
+下一步：请复制下方 submission_content 和 proof_url 到 AgentHansa 页面/API，由你本人手动提交
 
-## 最终提交包
+## 手动提交包
+
 submission_content:
 <exact content to submit>
 
 proof_url:
-<proof URL or pending>
+<proof URL>
 
 evidence:
 - <key evidence URLs/files, if any>
 
 checks:
-- 任务要求：PASS/FAIL
-- 内容要求：PASS/FAIL
-- Proof：PASS/FAIL/UNKNOWN
+- 任务要求：PASS（100% mandatory requirements satisfied）
+- 内容要求：PASS（language/platform/format/tone/length/links/tags/mentions/labels satisfied）
+- Proof：PASS（required proof exists and is accessible）
+- 外部事实：PASS（all factual claims verified or removed）
 
 remaining_risks:
-- none / list
+- none
 
-确认口令：确认提交
+## 手动提交步骤
+1. 打开 AgentHansa 对应 quest 页面
+2. 粘贴 submission_content
+3. 填入 proof_url
+4. 检查 evidence 是否完整
+5. 由你本人点击提交
+
+注意：agent 不会自动提交。
 ```
 
-Only submit after explicit approval of this exact package.
+If any check is `FAIL` or `UNKNOWN`, do not produce this package. Output `BLOCKED` with the exact missing requirement instead.
 
-Accepted approval examples:
+### Phase 9: Manual Submission Only
 
-- `确认提交`
-- `approved, submit`
-- `yes, submit`
-- `resubmit this version`
+The agent must never execute the submission.
 
-Do not treat vague messages like `ok`, `看起来可以`, or `继续` as submission approval.
-
-### Phase 9: Submit
-
-When approved and credentials/API are available, submit using the platform's required method.
-
-Before executing any mutating command, show:
-
-- endpoint/platform
-- payload summary
-- proof URL
-- risk note
-
-After submission, report:
-
-- submission status
-- response summary
-- ai_grade, if returned
-- ai_summary, if returned
-
-**Post-submission proof documentation reminder:**
-After a successful submission, always remind the user to:
-1. Save the proof URL immediately (e.g., bookmark the LinkedIn post, GitHub commit, or Google Doc)
-2. Keep a local copy of any screenshots used as proof
-3. Record the submission ID and timestamp
-4. Keep the final submission package (deliverable text + proof URL + checks) for future reference
+Even if the user asks again, respond with manual submission guidance only:
 
 ```markdown
-## 提交后Proof文档
+状态：MANUAL_SUBMISSION_GUIDE
+任务：<quest title>
+阻塞：需要用户本人手动提交
+下一步：请复制提交包到 AgentHansa 页面，由你本人点击提交
 
-建议立即保存以下信息：
-- proof_url: <URL>
-- submission_id: <ID if available>
-- 提交时间: <timestamp>
-- 交付物副本: <save the final deliverable text>
-
-Proof 文档是任务完成的唯一凭证，请妥善保存。
+我不会自动提交。下面是可复制的手动提交内容：
+...
 ```
+
+Submission, resubmission, posting, voting, commenting, uploading proof, and clicking final buttons are always human actions.
 
 ### Phase 10: Grade Handling
 
 If grade is returned:
 
 - `A` → report success and preserve proof/submission details.
-- `B/C/D/F/Spam/unknown` → diagnose, propose fix, prepare revised package, then stop.
+- `B/C/D/F/Spam/unknown` → diagnose, propose fix, prepare revised manual package, then stop.
 
 Never resubmit automatically.
+
+For non-A grades, the agent may only:
+
+1. diagnose the likely issue
+2. prepare a revised submission package
+3. explain manual resubmission steps
+
+The user must perform the resubmission manually. The agent must not execute resubmission through API, browser, shell, or any external tool.
 
 ---
 
@@ -476,18 +531,13 @@ Never resubmit automatically.
 任务：<title or unknown>
 阻塞：<one clear blocker>
 下一步：<minimum user input needed>
+
+## 阻塞原因
+- 未满足/不确定要求：<exact requirement>
+- 需要补充：<minimum user input or evidence>
 ```
 
-### When ready for human review
-
-```markdown
-状态：READY_FOR_REVIEW
-任务：<title>
-阻塞：等待你审核内容/Proof
-下一步：请回复「确认提交」或指出要改哪里
-```
-
-### Deliverable review (bilingual)
+### Deliverable review
 
 ```markdown
 状态：DELIVERABLE_REVIEW
@@ -499,16 +549,12 @@ Never resubmit automatically.
 
 <deliverable in quest-required language>
 
-## 自检
-- 任务要求：PASS/FAIL
-- 内容要求：PASS/FAIL
-- 外部事实：PASS/FAIL/UNKNOWN
+## 100% 任务符合性检查
+<table or bullets>
 
 ## 下一步
 请审核上方内容。如需修改，告诉我哪里改。
-如确认无误，我将整理最终提交包。
-
-> 以上为英文交付物，请审核内容是否正确。确认后我将整理最终提交包。
+若所有 mandatory requirements 均 PASS，我将整理手动提交包。
 ```
 
 ---
@@ -521,65 +567,37 @@ When the user says they are preparing a demo, hackathon submission, or screen re
 - use English for public deliverable if the sample quest requires English
 - simulate full quest-detail retrieval clearly when real AgentHansa credentials are not available
 - produce a compact run suitable for mobile screen recording
-- stop at the final confirmation gate
+- stop at the manual submission package
+- do not simulate automatic submission success
 
 ---
 
-## Operational Tips (Server Practice)
+## Operational Tips
 
 ### 内容风格：展示式 > 描述式
 
-**展示式**（直接列数据，A级）：
-- "Feature X has 10k users, 200 daily active"
-- "Post got 50 upvotes in 2 hours"
+Prefer evidence and concrete deliverables over vague descriptions.
 
-**描述式**（"我做了什么"，C级）：
-- "I researched and created a post about Feature X"
-- "I spent 2 hours analyzing the product"
+### 自检三铁律
 
-Always prefer 展示式：let data and outcomes speak directly.
-
-### 自检三铁律（submission-gate）
-
-1. **100% 满足任务要求** — 逐条对照 description/goal
-2. **100% 事实性** — 每个数据点可验证，不确定标 unknown
+1. **100% 满足任务要求** — 逐条对照 description/goal/rubric
+2. **100% 事实性** — 每个数据点可验证，不确定就删除或 BLOCKED
 3. **100% 逻辑性** — 无矛盾，前后一致
 
 ### Proof URL 优先级
 
 1. 任务指定了平台 → 用任务指定的
-2. 任务没指定 → GitHub Gist（最可信）
-3. 不要用 paste.rs / hastebin / termbin（AI grader 标记为 suspicious）
+2. 任务没指定 → GitHub Gist / GitHub repo / Google Doc / Notion, depending on task fit
+3. 避免使用容易被判 suspicious 的临时 paste 服务
 
-实测：同一内容 paste.rs=C, Gist=A，升两级。
+### Shell/API/Browser 注意
 
-### Grader 系统性 Bug 注意
+Do not use shell, API, or browser automation to submit, resubmit, publish, post, comment, vote, upvote, or click final buttons.
 
-**truncation 误判**：grader 在 ai_summary 报 "cuts off mid-sentence"，但实际 content 完整。证据：同一 quest 多名提交者收到相同反馈，不可能全部真实截断。
-
-**对策**：
-- content 保持 <900 词更安全
-- 截图 URL 不要放 Gist 附件里，要在 content 文本里直接 embed（如 `![desc](https://gist/...)`）
-
-### 搜索工具（服务器 IP 限制）
-
-服务器 IP 被主流 AI 平台封（ChatGPT/Perplexity/Claude/Gemini → CAPTCHA/422/无限加载）。
-
-可用：
-- **iAsk.ai** — 真实 AI 搜索引擎，可截图，质量足够满足 "real AI answers" 要求
-- SearXNG — 可能 403/429
-
-### Shell 提交注意
-
-payload 里有 `&` 符号用文件提交，否则 shell 会截断。
-
-### 竞品参考
-
-查同 quest 所有提交状态：`GET /alliance-war/quests/{id}/submissions`
-如果所有人都是 B/C，可能是题目本身 grader 偏严或系统性 bug，参考竞品调整策略。
+Read-only retrieval is allowed. External mutation is forbidden.
 
 ---
 
 ## Version
 
-1.4.0
+1.5.0
