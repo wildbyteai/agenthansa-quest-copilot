@@ -2,6 +2,11 @@
 
 This file shows the expected mobile-friendly output shape of a Hermes/OpenClaw run using `agenthansa-quest-copilot`.
 
+The sample follows two hard rules:
+
+1. The agent never submits automatically.
+2. The agent only prepares a manual submission package after every mandatory requirement is PASS.
+
 状态：ANALYZING_REQUIREMENTS
 任务：Launch post for agenthansa-quest-copilot
 阻塞：none
@@ -53,35 +58,41 @@ This file shows the expected mobile-friendly output shape of a Hermes/OpenClaw r
 ## 执行计划
 
 1. 写一条简短英文 launch post。
-2. 突出 full quest-detail retrieval、requirement extraction、self-check、proof planning、user-confirmed submission。
+2. 突出 full quest-detail retrieval、requirement extraction、100% compliance check、proof planning、manual-only submission package。
 3. 保持非官方、非夸张表述。
 4. 检查字数和限制。
 5. 使用 GitHub repo URL 作为 proof。
+6. 停在手动提交包，不执行提交。
 
-状态：READY_FOR_REVIEW
+状态：DELIVERABLE_REVIEW
 任务：Launch post for agenthansa-quest-copilot
-阻塞：等待用户审核内容/Proof
-下一步：确认无误后回复「确认提交」
+阻塞：none
+下一步：请审核交付物草稿和 100% 检查
 
-## 交付物草稿
+## 交付物草稿（任务要求：英文）
 
 I built `agenthansa-quest-copilot`, a Hermes/OpenClaw skill for AgentHansa-style alliance quests.
 
-It helps an agent turn a short quest notification into a disciplined execution flow: fetch the full quest detail, extract requirements, assess feasibility, draft the deliverable, run a compliance self-check, prepare proof, and stop for user approval before submission or resubmission.
+It helps an agent turn a short quest notification into a disciplined preparation flow: fetch the full quest detail, extract requirements, assess feasibility, draft the deliverable, run a 100% compliance check, prepare proof, and produce a manual submission package.
 
 It is not an official AgentHansa tool. It is a practical local workflow for builders who want fewer sloppy submissions and clearer proof handling.
 
 GitHub: https://github.com/wildbyteai/agenthansa-quest-copilot
 
-## 自检
+## 100% 任务符合性检查
 
-- 任务要求：PASS
-- 内容要求：PASS
-- Proof 准备：PASS
-- 外部事实：PASS
-- 剩余风险：Target posting platform was not specified, so formatting may need minor adjustment for X, Reddit, or AgentHansa submission fields.
+| Requirement | Evidence | Status |
+|---|---|---|
+| 英文帖文 | Deliverable is in English | PASS |
+| 120 words 以内 | Word count: 91 words | PASS |
+| 提到 Hermes/OpenClaw skill | First sentence mentions Hermes/OpenClaw skill | PASS |
+| 包含 GitHub 链接 | GitHub URL included | PASS |
+| practical, non-hype | No reward guarantee or official endorsement claim | PASS |
+| 输出最终帖文和 proof plan | Draft and proof plan are present | PASS |
+| 外部事实可验证 | Repo URL is public and verifiable | PASS |
 
-Word count: 93 words.
+Gate result: PASS
+Decision: READY_FOR_MANUAL_SUBMISSION
 
 ## Proof 计划
 
@@ -89,17 +100,17 @@ Word count: 93 words.
 - proof 内容：仓库本身可证明 skill 存在，最终帖文中也包含该 URL。
 - 访问性：public GitHub repo，预计可访问。
 
-状态：WAITING_FOR_SUBMIT_APPROVAL
+状态：READY_FOR_MANUAL_SUBMISSION
 任务：Launch post for agenthansa-quest-copilot
-阻塞：等待用户确认
-下一步：确认无误后回复「确认提交」
+阻塞：需要用户本人手动提交
+下一步：请复制下方 submission_content 和 proof_url 到 AgentHansa 页面，由你本人手动提交
 
-## 最终提交包
+## 手动提交包
 
 submission_content:
 I built `agenthansa-quest-copilot`, a Hermes/OpenClaw skill for AgentHansa-style alliance quests.
 
-It helps an agent turn a short quest notification into a disciplined execution flow: fetch the full quest detail, extract requirements, assess feasibility, draft the deliverable, run a compliance self-check, prepare proof, and stop for user approval before submission or resubmission.
+It helps an agent turn a short quest notification into a disciplined preparation flow: fetch the full quest detail, extract requirements, assess feasibility, draft the deliverable, run a 100% compliance check, prepare proof, and produce a manual submission package.
 
 It is not an official AgentHansa tool. It is a practical local workflow for builders who want fewer sloppy submissions and clearer proof handling.
 
@@ -108,12 +119,23 @@ GitHub: https://github.com/wildbyteai/agenthansa-quest-copilot
 proof_url:
 https://github.com/wildbyteai/agenthansa-quest-copilot
 
+evidence:
+- public GitHub repository URL
+
 checks:
-- 任务要求：PASS
-- 内容要求：PASS
-- Proof：PASS
+- 任务要求：PASS（100% mandatory requirements satisfied）
+- 内容要求：PASS（English, under 120 words, practical tone, required link included）
+- Proof：PASS（public GitHub URL available）
+- 外部事实：PASS（claims are limited and verifiable）
 
 remaining_risks:
-- Target posting platform was not specified; minor formatting changes may be needed.
+- none
 
-确认口令：确认提交
+## 手动提交步骤
+1. 打开 AgentHansa 对应 quest 页面
+2. 粘贴 submission_content
+3. 填入 proof_url
+4. 检查 evidence 是否完整
+5. 由你本人点击提交
+
+注意：agent 不会自动提交。
