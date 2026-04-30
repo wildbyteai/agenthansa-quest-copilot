@@ -1,24 +1,29 @@
 # Telegram Chat Example
 
-This file shows a realistic Telegram conversation between a Chinese-speaking operator (Kyle) and Hermes using the `agenthansa-quest-copilot` skill.
+This file shows a realistic Telegram conversation between a Chinese-speaking operator and Hermes using the `agenthansa-quest-copilot` skill.
+
+The example demonstrates two hard rules:
+
+1. The agent never submits automatically.
+2. A manual submission package is produced only after 100% mandatory requirement compliance.
 
 ---
 
 **User → Hermes:**
-```
+```text
 帮我分析一下这个任务
 
-🆕 New Quest: $50.00
-Find and vote on 5 ProductFeatHub feature requests related to AI product needs. Post your reasoning on LinkedIn. Proof: LinkedIn post + screenshot of 5 upvotes on ProductFeatHub.
+New Quest: $50.00
+Find 5 feature requests related to AI product needs. Write a short English post explaining why they matter. Proof: published post URL plus screenshots showing the 5 completed manual actions.
 Deadline: 2026-04-30
 ```
 
 ---
 
 **Hermes → User:**
-```
+```markdown
 状态：FETCHING_QUEST_DETAIL
-任务：Find and vote on 5 ProductFeatHub feature requests
+任务：Find 5 AI product feature requests
 阻塞：none
 下一步：拉取完整任务详情并验证
 
@@ -31,202 +36,198 @@ Deadline: 2026-04-30
 ---
 
 **Hermes → User:**
-```
+```markdown
 状态：ANALYZING_REQUIREMENTS
-任务：Find and vote on 5 ProductFeatHub feature requests
+任务：Find 5 AI product feature requests
 阻塞：none
 下一步：拆解任务要求并判断是否值得做
 
 ## 任务摘要
 - 奖励：$50.00
 - 截止：2026-04-30
-- 目标：在 ProductFeatHub 找 5 个 AI 产品需求相关的 feature request 并投票，在 LinkedIn 发帖说明原因
-- Proof：LinkedIn 帖子 + 5 个 upvote 截图
+- 目标：找 5 个 AI 产品需求相关 feature request，并写一条英文帖文说明原因
+- Proof：已发布帖文 URL + 5 个手动操作截图
 
 ## 要求拆解
-
 必须做：
-- 找到 5 个与 AI 产品需求相关的 ProductFeatHub feature request
-- 对这 5 个 request 投票（upvote）
-- 在 LinkedIn 发帖，说明选择原因
-- 帖子必须包含这 5 个 request 的链接
-- 提供 LinkedIn 帖子链接作为 proof
-- 提供 ProductFeatHub upvote 截图作为补充 proof
+- 找到 5 个与 AI 产品需求相关的 feature request
+- 完成任务要求的 5 个手动动作
+- 写一条英文帖文说明原因
+- 帖文包含 5 个 request 的引用或链接
+- 提供已发布帖文 URL
+- 提供 5 个手动动作截图
 
 最好做：
-- 帖子语气 practical，不要过度营销
-- 说明为什么这 5 个需求对 AI 产品有价值
+- 语气 practical，不要过度营销
+- 说明每个 request 为什么对 AI 产品有价值
 
 风险点：
-- LinkedIn 帖子长度和格式要自然，不能像 spam
-- 5 个 upvote 需要截图证明
-- ProductFeatHub 每个用户可能只能对同一 request 投一次
+- 截图必须能证明手动动作已完成
+- 帖文必须自然，不能像 spam
+- 所有链接和事实必须可验证
 
 未知/缺失：
-- ProductFeatHub 账号是否已有 / 是否需要新建
-- LinkedIn 是否已登录
+- 5 个 request 链接尚未提供
+- 已发布帖文 URL 尚未提供
+- 5 个截图尚未提供
 
 ## 执行判断
-
-结论：可以做
-
-原因：任务清晰，proof 要求明确，不需要外部凭证（已有账号）。主要风险是帖子内容和 upvote 截图准备。
+结论：有风险但可做
+原因：任务清晰，但 proof 依赖用户本人完成外部平台动作并提供证据。
 ```
 
 ---
 
 **Hermes → User:**
-```
+```markdown
 状态：PLANNING
-任务：Find and vote on 5 ProductFeatHub feature requests
-阻塞：none
-下一步：制定执行计划
+任务：Find 5 AI product feature requests
+阻塞：等待用户提供手动动作证据
+下一步：你完成外部平台动作后，把链接和截图发给我
 
 ## 执行计划
-
-1. 去 ProductFeatHub 搜索 "AI product" 相关 feature requests
-2. 筛选 5 个与 AI 产品需求最相关的 request
-3. 对这 5 个 request 逐一 upvote
-4. 截图保存 5 个 upvote 证明
-5. 起草 LinkedIn 帖子（英文，100-150 words，说明为什么这 5 个需求值得支持）
-6. 发布 LinkedIn 帖子
-7. 整理 proof：LinkedIn URL + 截图
+1. 你手动找到 5 个符合要求的 request
+2. 你完成任务要求的 5 个手动动作
+3. 你截图保存证据
+4. 我起草英文帖文
+5. 你发布帖文
+6. 你提供已发布帖文 URL 和截图
+7. 我做 100% 任务符合性检查
+8. 若全部 PASS，我整理手动提交包
 
 ## 需要你操作
-- 动作：在 ProductFeatHub upvote 5 个 request 并截图
-- 原因：这些操作需要你的账号完成
-- 完成后发给我：5 个 upvote 截图
+- 动作：完成外部平台手动动作、截图、发布帖文
+- 原因：这些操作涉及你的账号和外部平台写操作，只能由你本人完成
+- 完成后发给我：5 个 request 链接、5 张截图、已发布帖文 URL
 ```
 
 ---
 
 **User → Hermes:**
-```
-[用户手动执行了 upvote 并发送截图]
+```text
+[用户手动完成外部动作，并发送 5 个 request 链接、5 张截图、已发布帖文 URL]
 ```
 
 ---
 
 **Hermes → User:**
-```
-状态：CREATING_DELIVERABLE
-任务：Find and vote on 5 ProductFeatHub feature requests
+```markdown
+状态：DELIVERABLE_REVIEW
+任务：Find 5 AI product feature requests
 阻塞：none
-下一步：起草 LinkedIn 帖子并自检
+下一步：请审核交付物草稿和 100% 检查
 
-## 交付物草稿
+## 交付物草稿（任务要求：英文）
 
-LinkedIn Post:
+I reviewed five feature requests that matter for AI product builders:
 
-I've been exploring ProductFeatHub and found 5 feature requests that stand out for AI product builders:
+1. Request A — improves long-context workflows.
+2. Request B — makes structured outputs easier to validate.
+3. Request C — supports switching between model providers.
+4. Request D — helps teams version and reuse prompts.
+5. Request E — gives builders clearer usage and cost visibility.
 
-1. [AI Context Window Configuration] — Requesting flexible context limits for large model integrations.
-2: [Structured Output Formatting] — Built-in JSON schema support for AI-generated content.
-3. [Multi-Model Routing] — Ability to switch between LLM providers without refactoring.
-4. [Prompt Version Control] — Store and version prompt templates for teams.
-5. [Usage Analytics Dashboard] — Track token consumption and costs per model.
+These are practical infrastructure needs that reduce friction for teams building with AI.
 
-These aren't just nice-to-haves — they're the gaps that slow down AI product teams in practice. Worth watching.
+## 100% 任务符合性检查
 
-#AI #ProductManagement #LLM
+| Requirement | Evidence | Status |
+|---|---|---|
+| 找到 5 个 AI 产品需求相关 request | 用户提供了 5 个 request 链接 | PASS |
+| 完成 5 个手动动作 | 用户提供了 5 张截图 | PASS |
+| 英文帖文说明原因 | 草稿为英文并解释价值 | PASS |
+| 帖文包含 5 个 request 引用 | 草稿逐条引用 5 个 request | PASS |
+| 提供已发布帖文 URL | 用户提供了已发布 URL | PASS |
+| 提供截图 proof | 用户提供了截图 | PASS |
+| 外部事实可验证 | 链接和截图可验证 | PASS |
 
----
+Gate result: PASS
+Decision: READY_FOR_MANUAL_SUBMISSION
 
-## 自检
-- 任务要求：PASS（5 个 request，LinkedIn 帖子含链接）
-- 内容要求：PASS（英文，practical 语气，无 spam 语言）
-- Proof 准备：PASS（LinkedIn 帖子 + 5 个 upvote 截图已收）
-- 外部事实：PASS（提到的 request 在 ProductFeatHub 真实存在）
-- 剩余风险：LinkedIn 帖子 appearance 是否符合用户账号风格
-
-Word count: 98 words.
-
-## Proof 计划
-- proof_url: <用户发布后提供 LinkedIn URL>
-- 补充 proof: 5 个 upvote 截图（已由用户提供）
+> 以上为英文交付物，请审核内容是否正确。agent 不会发布、操作外部平台或提交任务。
 ```
 
 ---
 
 **Hermes → User:**
-```
-状态：WAITING_FOR_SUBMIT_APPROVAL
-任务：Find and vote on 5 ProductFeatHub feature requests
-阻塞：等待你确认
-下一步：确认无误后回复「确认提交」
+```markdown
+状态：READY_FOR_MANUAL_SUBMISSION
+任务：Find 5 AI product feature requests
+阻塞：需要用户本人手动提交
+下一步：请复制下方 submission_content 和 proof_url 到 AgentHansa 页面，由你本人手动提交
 
-## 最终提交包
+## 手动提交包
 
 submission_content:
-I've been exploring ProductFeatHub and found 5 feature requests that stand out for AI product builders:
+I reviewed five feature requests that matter for AI product builders:
 
-1. [AI Context Window Configuration] — Requesting flexible context limits for large model integrations.
-2. [Structured Output Formatting] — Built-in JSON schema support for AI-generated content.
-3. [Multi-Model Routing] — Ability to switch between LLM providers without refactoring.
-4. [Prompt Version Control] — Store and version prompt templates for teams.
-5. [Usage Analytics Dashboard] — Track token consumption and costs per model.
+1. Request A — improves long-context workflows.
+2. Request B — makes structured outputs easier to validate.
+3. Request C — supports switching between model providers.
+4. Request D — helps teams version and reuse prompts.
+5. Request E — gives builders clearer usage and cost visibility.
 
-These aren't just nice-to-haves — they're the gaps that slow down AI product teams in practice. Worth watching.
-
-#AI #ProductManagement #LLM
+These are practical infrastructure needs that reduce friction for teams building with AI.
 
 proof_url:
-<pending - 请发布后提供 LinkedIn URL>
+<已发布帖文 URL>
 
-proof_补充:
-5x ProductFeatHub upvote 截图（已提供）
+evidence:
+- 5 个 request 链接
+- 5 张手动动作截图
+- 已发布帖文 URL
 
 checks:
-- 任务要求：PASS
-- 内容要求：PASS
-- Proof：PASS
+- 任务要求：PASS（100% mandatory requirements satisfied）
+- 内容要求：PASS（English post, 5 request references, practical tone）
+- Proof：PASS（published URL + screenshots available）
+- 外部事实：PASS（links/screenshots provided）
 
 remaining_risks:
 - none
 
-确认口令：确认提交
+## 手动提交步骤
+1. 打开 AgentHansa 对应 quest 页面
+2. 粘贴 submission_content
+3. 填入 proof_url
+4. 附上或引用 5 张截图
+5. 由你本人点击提交
+
+注意：agent 不会自动提交。
 ```
 
 ---
 
 **User → Hermes:**
-```
+```text
 确认提交
 ```
 
 ---
 
 **Hermes → User:**
-```
-状态：SUBMITTING
-任务：Find and vote on 5 ProductFeatHub feature requests
-阻塞：none
-下一步：提交任务
+```markdown
+状态：MANUAL_SUBMISSION_GUIDE
+任务：Find 5 AI product feature requests
+阻塞：需要用户本人手动提交
+下一步：请复制提交包到 AgentHansa 页面，由你本人点击提交
 
-## 提交执行
-- 平台：AgentHansa
-- Payload：LinkedIn post URL + description
-- Proof：LinkedIn URL + 5x upvote 截图
+我不会自动提交。`确认提交` 只表示刷新手动提交指引。
 
-状态：SUBMITTED
-任务：Find and vote on 5 ProductFeatHub feature requests
-阻塞：none
-下一步：等待 grading
-
-✅ Task submitted successfully!
-Submission ID: [ID]
-Proof: [LinkedIn URL]
-
-收到 grading 后我会分析结果并通知你。
+## 手动提交步骤
+1. 打开 AgentHansa 对应 quest 页面
+2. 粘贴上面的 submission_content
+3. 填入 proof_url
+4. 附上或引用 5 张截图
+5. 最后由你本人点击提交
 ```
 
 ---
 
 ## Notes on This Example
 
-- The skill **never auto-submits** without explicit `确认提交`
-- The **status header** is always first and mobile-readable
-- **Human actions** (upvoting, posting) are explicitly separated
-- **Bilingual**: workflow in Chinese, deliverable in English (as required by the quest)
-- **Proof collection** is explicit: LinkedIn URL + screenshot
-- **Self-check** happens before the confirmation gate, not after
+- The skill never auto-submits, even after `确认提交`
+- The status header is always first and mobile-readable
+- Human actions are explicitly separated from agent work
+- A manual submission package is only produced after every mandatory requirement is PASS
+- `SUBMITTING` and `SUBMITTED` are intentionally absent
