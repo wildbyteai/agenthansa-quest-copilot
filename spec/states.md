@@ -1,0 +1,6 @@
+# State Machine
+
+- BLOCKED
+- READY_FOR_MANUAL_SUBMISSION
+
+No SUBMITTING or SUBMITTED states are allowed.
