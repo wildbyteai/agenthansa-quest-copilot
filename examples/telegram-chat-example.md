@@ -1,233 +1,138 @@
 # Telegram Chat Example
 
-This file shows a realistic Telegram conversation between a Chinese-speaking operator and Hermes using the `agenthansa-quest-copilot` skill.
+This example shows the intended mobile workflow for an AgentHansa Alliance War quest.
 
-The example demonstrates two hard rules:
+## User
 
-1. The agent never submits automatically.
-2. A manual submission package is produced only after 100% mandatory requirement compliance.
-
----
-
-**User → Hermes:**
 ```text
-帮我分析一下这个任务
+按任务流程执行
 
-New Quest: $50.00
-Find 5 feature requests related to AI product needs. Write a short English post explaining why they matter. Proof: published post URL plus screenshots showing the 5 completed manual actions.
+AgentHansa Alliance War Quest:
+Quest ID: 123
+Reward: $50
+Task: Find 5 AI product feature requests, write a short English post explaining why they matter, and submit proof_url with the published post and screenshots.
 Deadline: 2026-04-30
 ```
 
----
+## Hermes
 
-**Hermes → User:**
 ```markdown
 状态：FETCHING_QUEST_DETAIL
 任务：Find 5 AI product feature requests
 阻塞：none
-下一步：拉取完整任务详情并验证
+下一步：确认完整 Alliance War quest 详情
 
-## 任务详情拉取
-- 状态：SUCCESS
-- 来源：用户提供的完整任务描述
-- 匹配校验：✓ 标题 ✓ 奖励 ✓ 截止日期
+## 详情确认
+- 来源：用户提供的 quest detail
+- 匹配字段：Quest ID / reward / deadline
+- 结果：可进入需求分析
 ```
 
----
+## Hermes
 
-**Hermes → User:**
 ```markdown
 状态：ANALYZING_REQUIREMENTS
 任务：Find 5 AI product feature requests
 阻塞：none
-下一步：拆解任务要求并判断是否值得做
-
-## 任务摘要
-- 奖励：$50.00
-- 截止：2026-04-30
-- 目标：找 5 个 AI 产品需求相关 feature request，并写一条英文帖文说明原因
-- Proof：已发布帖文 URL + 5 个手动操作截图
+下一步：拆解要求并判断是否可做
 
 ## 要求拆解
 必须做：
-- 找到 5 个与 AI 产品需求相关的 feature request
-- 完成任务要求的 5 个手动动作
-- 写一条英文帖文说明原因
-- 帖文包含 5 个 request 的引用或链接
-- 提供已发布帖文 URL
-- 提供 5 个手动动作截图
-
-最好做：
-- 语气 practical，不要过度营销
-- 说明每个 request 为什么对 AI 产品有价值
+- 找到 5 个与 AI 产品需求相关的 feature requests
+- 写一条英文短帖
+- 说明每个 request 为什么重要
+- 提供已发布帖子 URL
+- 提供截图证据
+- 最终提交 `content` 和 `proof_url`
 
 风险点：
-- 截图必须能证明手动动作已完成
-- 帖文必须自然，不能像 spam
-- 所有链接和事实必须可验证
+- 外部平台动作必须由用户本人完成
+- proof_url 必须公开可访问
+- 内容不能像 spam
 
 未知/缺失：
 - 5 个 request 链接尚未提供
-- 已发布帖文 URL 尚未提供
-- 5 个截图尚未提供
+- published post URL 尚未提供
 
-## 执行判断
-结论：有风险但可做
-原因：任务清晰，但 proof 依赖用户本人完成外部平台动作并提供证据。
+执行判断：
+有风险但可做。任务清楚，但 proof 依赖用户手动完成外部动作。
 ```
 
----
+## Hermes
 
-**Hermes → User:**
 ```markdown
 状态：PLANNING
 任务：Find 5 AI product feature requests
-阻塞：等待用户提供手动动作证据
-下一步：你完成外部平台动作后，把链接和截图发给我
-
-## 执行计划
-1. 你手动找到 5 个符合要求的 request
-2. 你完成任务要求的 5 个手动动作
-3. 你截图保存证据
-4. 我起草英文帖文
-5. 你发布帖文
-6. 你提供已发布帖文 URL 和截图
-7. 我做 100% 任务符合性检查
-8. 若全部 PASS，我整理手动提交包
+阻塞：等待用户提供 request 链接和 proof
+下一步：用户完成外部动作后发回链接、截图和 published post URL
 
 ## 需要你操作
-- 动作：完成外部平台手动动作、截图、发布帖文
-- 原因：这些操作涉及你的账号和外部平台写操作，只能由你本人完成
-- 完成后发给我：5 个 request 链接、5 张截图、已发布帖文 URL
+- 动作：找到 5 个 request，完成任务要求的外部动作，发布帖子，保存截图
+- 原因：这些动作涉及你的外部账号，agent 不能代替执行
+- 完成后发给我：5 个 request 链接、截图、published post URL
 ```
 
----
+## User
 
-**User → Hermes:**
 ```text
-[用户手动完成外部动作，并发送 5 个 request 链接、5 张截图、已发布帖文 URL]
+Here are the 5 request links, screenshots, and the published post URL:
+[links...]
 ```
 
----
+## Hermes
 
-**Hermes → User:**
 ```markdown
-状态：DELIVERABLE_REVIEW
+状态：COMPLIANCE_CHECK
 任务：Find 5 AI product feature requests
 阻塞：none
-下一步：请审核交付物草稿和 100% 检查
-
-## 交付物草稿（任务要求：英文）
-
-I reviewed five feature requests that matter for AI product builders:
-
-1. Request A — improves long-context workflows.
-2. Request B — makes structured outputs easier to validate.
-3. Request C — supports switching between model providers.
-4. Request D — helps teams version and reuse prompts.
-5. Request E — gives builders clearer usage and cost visibility.
-
-These are practical infrastructure needs that reduce friction for teams building with AI.
-
-## 100% 任务符合性检查
+下一步：确认所有 mandatory requirements 是否 PASS
 
 | Requirement | Evidence | Status |
 |---|---|---|
-| 找到 5 个 AI 产品需求相关 request | 用户提供了 5 个 request 链接 | PASS |
-| 完成 5 个手动动作 | 用户提供了 5 张截图 | PASS |
-| 英文帖文说明原因 | 草稿为英文并解释价值 | PASS |
-| 帖文包含 5 个 request 引用 | 草稿逐条引用 5 个 request | PASS |
-| 提供已发布帖文 URL | 用户提供了已发布 URL | PASS |
-| 提供截图 proof | 用户提供了截图 | PASS |
-| 外部事实可验证 | 链接和截图可验证 | PASS |
+| 5 AI product requests | 用户提供 5 个 request links | PASS |
+| English post | published post URL | PASS |
+| Explains why they matter | post content covers 5 reasons | PASS |
+| Screenshots | 用户提供截图 | PASS |
+| proof_url public | published URL accessible / user confirmed | PASS |
 
 Gate result: PASS
-Decision: READY_FOR_MANUAL_SUBMISSION
-
-> 以上为英文交付物，请审核内容是否正确。agent 不会发布、操作外部平台或提交任务。
 ```
 
----
+## User
 
-**Hermes → User:**
+```text
+确认提交
+```
+
+## Hermes
+
 ```markdown
-状态：READY_FOR_MANUAL_SUBMISSION
+状态：READY_FOR_SUBMISSION_MATERIAL
 任务：Find 5 AI product feature requests
-阻塞：需要用户本人手动提交
-下一步：请复制下方 submission_content 和 proof_url 到 AgentHansa 页面，由你本人手动提交
+阻塞：none
+下一步：请由你本人在 AgentHansa Alliance War 页面提交
 
-## 手动提交包
-
-submission_content:
-I reviewed five feature requests that matter for AI product builders:
-
-1. Request A — improves long-context workflows.
-2. Request B — makes structured outputs easier to validate.
-3. Request C — supports switching between model providers.
-4. Request D — helps teams version and reuse prompts.
-5. Request E — gives builders clearer usage and cost visibility.
-
-These are practical infrastructure needs that reduce friction for teams building with AI.
+## 最终提交材料
+content:
+I reviewed five AI product feature requests and explained why each matters for builders. The published post and supporting screenshots are included in the proof URL.
 
 proof_url:
-<已发布帖文 URL>
-
-evidence:
-- 5 个 request 链接
-- 5 张手动动作截图
-- 已发布帖文 URL
+<published proof URL>
 
 checks:
-- 任务要求：PASS（100% mandatory requirements satisfied）
-- 内容要求：PASS（English post, 5 request references, practical tone）
-- Proof：PASS（published URL + screenshots available）
-- 外部事实：PASS（links/screenshots provided）
+- 任务要求：PASS
+- 内容要求：PASS
+- Proof：PASS
+- 外部事实：PASS
 
 remaining_risks:
 - none
 
 ## 手动提交步骤
-1. 打开 AgentHansa 对应 quest 页面
-2. 粘贴 submission_content
-3. 填入 proof_url
-4. 附上或引用 5 张截图
-5. 由你本人点击提交
-
-注意：agent 不会自动提交。
+1. 打开对应 Alliance War quest 页面。
+2. 粘贴 `content`。
+3. 粘贴 `proof_url`。
+4. 由你本人点击提交。
 ```
 
----
-
-**User → Hermes:**
-```text
-确认提交
-```
-
----
-
-**Hermes → User:**
-```markdown
-状态：MANUAL_SUBMISSION_GUIDE
-任务：Find 5 AI product feature requests
-阻塞：需要用户本人手动提交
-下一步：请复制提交包到 AgentHansa 页面，由你本人点击提交
-
-我不会自动提交。`确认提交` 只表示刷新手动提交指引。
-
-## 手动提交步骤
-1. 打开 AgentHansa 对应 quest 页面
-2. 粘贴上面的 submission_content
-3. 填入 proof_url
-4. 附上或引用 5 张截图
-5. 最后由你本人点击提交
-```
-
----
-
-## Notes on This Example
-
-- The skill never auto-submits, even after `确认提交`
-- The status header is always first and mobile-readable
-- Human actions are explicitly separated from agent work
-- A manual submission package is only produced after every mandatory requirement is PASS
-- `SUBMITTING` and `SUBMITTED` are intentionally absent
+The agent does not call the submit endpoint.

@@ -1,71 +1,40 @@
-# One-Minute Demo Script
-
-Use this script for a short hackathon-style screen recording.
+# Demo Script
 
 ## 0-10s: Show The Project
 
-Open the GitHub repository.
+Open the repository README.
 
 Say:
 
-> This is `agenthansa-quest-copilot`, a Hermes/OpenClaw skill that turns a general-purpose agent into a disciplined AgentHansa quest execution copilot.
+> This is `agenthansa-quest-copilot`, a Hermes/OpenClaw skill for AgentHansa Alliance War quests only.
 
-## 10-20s: Show The Skill
+## 10-25s: Show The Boundaries
 
-Open `SKILL.md` and briefly show:
+Open `SKILL.md` and show:
 
-- natural triggers such as `New Quest`, `做任务`, and `按任务流程执行`
-- Chinese operator workflow by default
-- Phase 0: full quest detail retrieval
-- mobile-friendly status header
-- compliance self-check
-- explicit user confirmation gate
+- Hard Scope Boundary.
+- Submission Boundary.
+- Alliance War endpoints.
 
 Say:
 
-> The skill keeps the operator workflow clear in Chinese, while generating the final deliverable in the language required by the quest.
+> It analyzes Alliance War quests and prepares final submission material. It never submits or verifies for the user.
 
-## 20-35s: Give Hermes The Quest
+## 25-50s: Show The Workflow
 
-Paste the sample quest from `examples/sample-quest.md` into Hermes.
+Open `examples/telegram-chat-example.md`.
 
-Suggested prompt:
+Show:
 
-```text
-Use agenthansa-quest-copilot demo mode.
-Complete this AgentHansa-style quest and stop at the user confirmation gate:
+- Full quest detail confirmation.
+- Chinese requirement extraction.
+- Evidence audit.
+- 100% compliance table.
 
-[paste sample quest]
-```
+## 50-70s: Show Final Material
 
-Show Hermes producing:
-
-- 状态 header
-- 任务详情拉取
-- 要求拆解
-- 执行判断
-
-## 35-50s: Show The Output
-
-Scroll to:
-
-- English deliverable draft
-- 中文自检
-- Proof 计划
-- 最终提交包
+Show `READY_FOR_SUBMISSION_MATERIAL`.
 
 Say:
 
-> The operator sees Chinese status, risks, and checks. The final content stays in English because the quest requires English.
-
-## 50-60s: Close With The Value
-
-Show `examples/final-submission.md` or the final package.
-
-Say:
-
-> This is a lightweight AgentOps workflow for AgentHansa builders. It reduces sloppy submissions, keeps proof handling explicit, and prevents blind resubmission loops.
-
-## Optional Final Pitch
-
-> Every agent economy needs agents that help other agents execute tasks reliably. This skill is a small step toward that: a quest execution workflow for Hermes and OpenClaw.
+> The final output is the exact `content` and `proof_url` material. The user performs the final AgentHansa submission manually.

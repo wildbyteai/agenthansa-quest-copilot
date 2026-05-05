@@ -1,33 +1,68 @@
-# Canonical Quest Workflow
+# Canonical Alliance War Quest Workflow
 
-This document is the single source of truth for how a quest must be processed.
+This repository is only for AgentHansa Alliance War quests.
+
+## Platform Sources
+
+Official AgentHansa sources are authoritative:
+
+- `https://www.agenthansa.com/`
+- `https://www.agenthansa.com/skill.md`
+- `https://www.agenthansa.com/llms.txt`
+- `https://www.agenthansa.com/llms-full.txt`
+- `https://www.agenthansa.com/docs`
+- `https://www.agenthansa.com/openapi.json`
+
+## Alliance War Endpoints
+
+- `GET /api/alliance-war/quests`
+- `GET /api/alliance-war/quests/{quest_id}`
+- `GET /api/alliance-war/quests/my`
+- User-run reference only: `POST /api/alliance-war/quests/{quest_id}/submit`
+- User-run reference only: `POST /api/alliance-war/quests/{quest_id}/verify`
 
 ## Phases
 
-### Phase 0 — Fetch Full Quest Detail
-Retrieve the complete quest description. Partial information is not allowed.
+### Phase 0: Fetch Full Alliance War Quest Detail
 
-### Phase 1 — Extract Mandatory Requirements
-List every mandatory requirement explicitly.
+Do not draft from a short notification. Confirm full quest details from user text, URL, ID, read-only API, or screenshot.
 
-### Phase 2 — Feasibility Decision
-Decide whether the quest can be completed without violating rules or inventing facts.
+### Phase 1: Analyze Requirements
 
-### Phase 3 — Execution Plan
-Plan how each requirement will be satisfied.
+Extract mandatory requirements, proof requirements, submission fields, grading/rubric, human-only actions, and unknowns.
 
-### Phase 3.5 — Evidence‑First Claim Audit
-Before any writing:
-1. List every claim that will appear.
-2. Attach verifiable evidence for each claim.
-3. Remove claims without evidence.
+### Phase 2: Decide Feasibility
 
-### Phase 4 — Deliverable Creation
-Write using only evidence‑approved claims while matching all quest formatting rules.
+Return `可以做`, `有风险但可做`, `暂停，先补信息`, or `不建议做`.
 
-### Phase 5 — Compliance Check
-For every mandatory requirement, produce Requirement / Evidence / Status.
-No UNKNOWN or FAIL allowed.
+### Phase 3: Plan Execution
 
-### Phase 6 — Manual Submission Package
-Prepare instructions and artifacts for the human to submit manually.
+Plan deliverable, evidence, user actions, proof URL strategy, compliance gate, and final submission material.
+
+### Phase 4: Evidence Audit
+
+List factual claims, attach evidence, and remove unsupported claims before writing.
+
+### Phase 5: Create Deliverable
+
+Draft only from approved claims and exact quest requirements.
+
+### Phase 6: User Handoff
+
+Ask the user to perform required account-bound actions and provide resulting URLs/screenshots.
+
+### Phase 7: 100% Compliance Check
+
+Every mandatory requirement must be `PASS`; otherwise output `BLOCKED`.
+
+### Phase 8: Proof Plan
+
+Prepare a verifiable public `proof_url` plan or confirm an existing proof URL.
+
+### Phase 9: Final Submission Material
+
+After user confirmation and all-PASS compliance, assemble `content`, `proof_url`, checks, risks, and manual steps.
+
+### Phase 10: Grade Or Resubmission Feedback
+
+Diagnose feedback, revise, re-check, and rebuild final material. Never resubmit automatically.

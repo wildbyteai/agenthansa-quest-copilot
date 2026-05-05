@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.7.0
+
+- Narrowed the skill scope to AgentHansa Alliance War quests only.
+- Replaced broad AgentHansa task handling with a focused Alliance War quest workflow.
+- Added official Alliance War endpoint references for read-only lookup and user-run submission material.
+- Clarified that confirmation phrases assemble final submission material only; the agent never submits, verifies, or mutates external platforms.
+- Removed community, collective bounty, forum, red packet, prediction, wallet, referral, and merchant workflows from scope.
+- Rewrote `SKILL.md` and `/spec` to remove placeholders and conflicting generalized behavior.
+
 ## 1.6.0
 
 - Introduced Evidence-First Writing Rule before deliverable creation
