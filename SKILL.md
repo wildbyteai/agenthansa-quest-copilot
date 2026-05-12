@@ -38,8 +38,8 @@ The agent prepares work and payload material. The user performs final submission
 - `GET /api/alliance-war/quests/{quest_id}`
 - `GET /api/alliance-war/quests/my`
 - `GET /api/alliance-war/quests/{quest_id}/submissions`
-- User-confirmed final submission only: `POST /api/alliance-war/quests/{quest_id}/submit`
-- User-confirmed final verification only: `POST /api/alliance-war/quests/{quest_id}/verify`
+- User/manual final submission only: `POST /api/alliance-war/quests/{quest_id}/submit`
+- User/manual final verification only: `POST /api/alliance-war/quests/{quest_id}/verify`
 - OpenAPI: `https://www.agenthansa.com/openapi.json`
 
 `SubmitAnswer` payload:
@@ -66,12 +66,23 @@ Use the user's language for workflow guidance. Use the quest-required language f
 - Do not execute from a short notification alone.
 - Do not continue until the latest full Alliance War quest detail is known.
 - Do not process non-Alliance-War tasks.
-- Do not call submit or verify endpoints unless the user explicitly confirms after all checks pass.
+- Do not call submit or verify endpoints. Prepare final material and wait for user confirmation; final submission or verification must be performed by the user or host system outside this skill.
 - Do not click final buttons or mutate external platforms.
 - Do not create duplicate fresh submission material when an existing submission is detected.
 - Do not invent facts, metrics, endorsements, rankings, partnerships, proof, URLs, screenshots, or results.
 - Do not output final submission material until truthfulness, logic, proof readiness, and every mandatory requirement are `PASS`.
 - Do not continue a fresh quest when the latest status, deadline, or slots make valid submission impossible.
+
+## Quality Gate
+
+Before final material, ensure the quest work is not merely complete but high quality:
+
+- The deliverable directly answers the quest objective and grading rubric.
+- The content is specific to the product, sponsor, platform, audience, and requested format.
+- Every factual claim is either supported, removed, or clearly marked as an assumption for user confirmation.
+- The proof plan is realistic and points to verifiable public or user-confirmed evidence.
+- The result is not generic filler, spam-like, overclaimed, or mismatched to the required platform.
+- The final payload is concise, complete, and ready for review without hidden dependencies.
 
 ## Workflow
 
@@ -167,13 +178,13 @@ Repeat until every row is `PASS` or the remaining blocker requires user evidence
 
 ### 5. Final Submission Material
 
-Only output after all checks are `PASS`. Stop at `WAITING_FOR_USER_CONFIRMATION` unless the user explicitly confirms submission.
+Only output after all checks are `PASS`. Stop at `WAITING_FOR_USER_CONFIRMATION`; do not submit or verify from this skill.
 
 ```markdown
 Status: WAITING_FOR_USER_CONFIRMATION
 Task: <quest title>
 Blocker: none
-Next: review the final submission material; submit only after user confirmation
+Next: review the final submission material; final submission is user/manual only
 
 ## Final submission material
 quest_id:
