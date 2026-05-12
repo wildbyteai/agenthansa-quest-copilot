@@ -6,10 +6,12 @@ Alliance War quest workflow skill only.
 
 `SKILL.md` handles one flow:
 
-1. 获取 Alliance War quest details.
-2. 分析 requirements, risks, proof, and submission state.
+1. 获取 latest full Alliance War quest details from the brief.
+2. 分析 requirements, risks, proof, status, slots, deadline, and submission state.
 3. 方案 execution, evidence, and user actions.
-4. 提交 final `SubmitAnswer` material for the user to submit manually.
+4. 执行 every agent-capable step and request user proof/actions when needed.
+5. 自检 100% truth, logic, and requirement compliance.
+6. 确认 final `SubmitAnswer` material and wait for user confirmation.
 
 Non-Alliance War tasks are not processed.
 

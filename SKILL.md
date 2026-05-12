@@ -1,7 +1,7 @@
 ---
 name: agenthansa-quest-copilot
-version: 1.8.0
-description: Alliance War quest workflow only: fetch quest details, analyze requirements, plan execution, verify compliance, and prepare the official submission payload.
+version: 1.8.1
+description: Alliance War quest workflow only: fetch the latest full quest detail from a brief, execute the quest step by step, verify 100% truth/logic/requirement compliance, and wait for user confirmation before final submission.
 ---
 
 # AgentHansa Quest Copilot
@@ -25,10 +25,12 @@ Do not process any other AgentHansa module or unrelated task.
 
 This skill has one workflow:
 
-1. 获取: fetch or confirm full Alliance War quest details.
-2. 分析: extract requirements, proof needs, risks, and current submission state.
+1. 获取: use the brief to fetch the latest full Alliance War quest details.
+2. 分析: extract requirements, proof needs, risks, status, slots, deadline, and submission state.
 3. 方案: produce the execution plan, evidence plan, and user action list.
-4. 提交: prepare the official `SubmitAnswer` payload and manual submission steps.
+4. 执行: complete every agent-capable step and pause only for user-owned actions.
+5. 自检: verify 100% truthfulness, 100% logical consistency, and 100% requirement compliance.
+6. 确认: prepare the official `SubmitAnswer` payload and wait for user confirmation.
 
 The agent prepares submission material. The user performs final submission and verification.
 
@@ -53,7 +55,7 @@ The agent prepares submission material. The user performs final submission and v
 Every major response starts with:
 
 ```markdown
-状态：<FETCHING_QUEST_DETAIL | CHECKING_SUBMISSION_STATE | ANALYZING_REQUIREMENTS | PLANNING | EVIDENCE_AUDIT | CREATING_DELIVERABLE | DELIVERABLE_REVIEW | WAITING_FOR_USER_ACTION | COMPLIANCE_CHECK | READY_FOR_SUBMISSION_MATERIAL | GRADE_HANDLING | BLOCKED>
+状态：<FETCHING_QUEST_DETAIL | CHECKING_SUBMISSION_STATE | ANALYZING_REQUIREMENTS | PLANNING | EVIDENCE_AUDIT | CREATING_DELIVERABLE | DELIVERABLE_REVIEW | WAITING_FOR_USER_ACTION | COMPLIANCE_CHECK | WAITING_FOR_USER_CONFIRMATION | GRADE_HANDLING | BLOCKED>
 任务：<quest title or unknown>
 阻塞：<none or blocker>
 下一步：<next action>
@@ -70,13 +72,15 @@ Use Chinese for workflow guidance. Use the quest-required language for deliverab
 - Do not click final buttons or mutate external platforms.
 - Do not create duplicate fresh submission material when an existing submission is detected.
 - Do not invent facts, metrics, endorsements, rankings, partnerships, or results.
-- Do not output final submission material until every mandatory requirement is `PASS`.
+- Do not output final submission material until truthfulness, logic, and every mandatory requirement are `PASS`.
+- Do not continue a fresh quest when the latest status, deadline, or slots make a valid submission impossible.
+- If self-check quality is not good enough, iterate: revise the plan, evidence, deliverable, or proof and run self-check again.
 
 ## Workflow
 
-### 1. 获取: Fetch Quest Detail
+### 1. 获取: Fetch Latest Full Quest Detail
 
-Use the best available source:
+Start from the user's brief notification, but never execute from the brief alone. Use the best available source:
 
 1. User-provided full quest detail.
 2. User-provided Alliance War URL or `quest_id`.
@@ -93,8 +97,12 @@ Check state when read-only access is available:
 
 - Quest status and deadline.
 - Available slots if present.
-- Existing user submissions via `GET /api/alliance-war/quests/my`.
+- Existing user submissions via `GET /api/alliance-war/quests/my` if the endpoint works.
 - Relevant existing submissions via `GET /api/alliance-war/quests/{quest_id}/submissions`.
+
+If `/quests/my` fails or is unavailable, ask the user to confirm whether they already submitted this quest. Do not assume there is no existing submission.
+
+If the latest status is not submit-ready, the deadline has passed, or slots are unavailable, output `BLOCKED` unless the user is explicitly handling an existing submission or revision.
 
 Extract:
 
@@ -140,7 +148,11 @@ Before drafting, run evidence audit:
 |---|---|---|
 | factual claim | quest text / URL / user evidence | keep/remove |
 
-Draft only from kept claims. After drafting, output `DELIVERABLE_REVIEW` and wait for user review or missing proof.
+Draft only from kept claims.
+
+Execute every step the agent can complete safely: research, outlining, writing, formatting, source checks, proof document planning, and payload assembly. Do not stop at analysis if the next step is agent-capable.
+
+After drafting, output `DELIVERABLE_REVIEW` and wait for user review or missing proof.
 
 When user-owned action is required, output `WAITING_FOR_USER_ACTION`:
 
@@ -159,25 +171,38 @@ Before final submission material, every mandatory requirement must be `PASS`.
 |---|---|---|
 | exact mandatory requirement | proof / draft / URL / screenshot / user evidence | PASS/FAIL/UNKNOWN |
 
-Always check:
+Always check these self-check rows:
 
+- 真实性：every factual claim is supported by quest text, official source, or user evidence.
+- 逻辑性：content structure and reasoning are coherent and non-contradictory.
+- 任务要求：every mandatory quest requirement is satisfied.
 - `content` exists and is at least 20 characters.
 - Required `proof_url` exists.
 - `proof_url` is public or user-confirmed accessible.
 - `challenge_answer` is handled if required.
 - No duplicate fresh submission is being prepared.
+- Latest quest status, deadline, and slots still allow submission.
 
-If any row is `FAIL` or `UNKNOWN`, output `BLOCKED` and request only the missing item.
+If any row is `FAIL` or `UNKNOWN`, output `BLOCKED` and request only the missing item. Never claim 100% truth, 100% logic, or 100% compliance without evidence.
 
-### 5. 提交: Final Submission Material
+If all missing items are agent-fixable, do not block. Iterate:
+
+1. Identify the failed row.
+2. Return to the required phase: analysis, plan, evidence audit, draft, or proof plan.
+3. Revise the work.
+4. Re-run the complete self-check.
+
+Repeat until every row is `PASS` or the remaining blocker requires user evidence/action.
+
+### 5. 确认: Final Submission Material
 
 Only output after user asks `准备提交`, `确认提交`, or equivalent and all checks are `PASS`.
 
 ```markdown
-状态：READY_FOR_SUBMISSION_MATERIAL
+状态：WAITING_FOR_USER_CONFIRMATION
 任务：<quest title>
 阻塞：none
-下一步：请由你本人在 AgentHansa Alliance War 页面提交
+下一步：请审核最终提交材料；确认无误后再由你本人提交
 
 ## 最终提交材料
 content:
@@ -190,16 +215,23 @@ challenge_answer:
 <only if required; otherwise omit>
 
 checks:
+- 真实性：PASS
+- 逻辑性：PASS
 - 任务要求：PASS
 - 内容要求：PASS
 - Proof：PASS
 - 外部事实：PASS
+- 最新状态/slots/deadline：PASS
 - 重复提交风险：PASS
 
 remaining_risks:
 - none / list
 
-## 手动提交步骤
+## 确认门
+请先审核 `content`、`proof_url`、checks 和 remaining_risks。
+只有你确认后，才进入手动提交。
+
+## 手动提交步骤（由你本人执行）
 1. 打开对应 Alliance War quest 页面。
 2. 粘贴 `content`。
 3. 粘贴 `proof_url`。

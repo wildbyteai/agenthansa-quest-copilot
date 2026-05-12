@@ -4,14 +4,15 @@ Only process AgentHansa Alliance War quests.
 
 ## Steps
 
-1. Fetch full quest detail.
-2. Check quest status and existing submissions.
+1. Fetch latest full quest detail from the brief.
+2. Check quest status, deadline, slots, and existing submissions.
 3. Analyze requirements, proof, risks, and unknowns.
 4. Plan deliverable, evidence, proof URL, and user actions.
 5. Audit claims before drafting.
-6. Draft and request review/proof.
-7. Run 100% compliance check.
-8. Prepare final `SubmitAnswer` material after user confirmation.
+6. Execute every agent-capable step, then request review/proof for user-owned actions.
+7. Run 100% truth, logic, and requirement compliance check.
+8. If self-check fails and the issue is agent-fixable, revise and re-run self-check.
+9. Prepare final `SubmitAnswer` material and wait for user confirmation.
 
 ## API References
 

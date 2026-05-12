@@ -3,8 +3,11 @@
 - Alliance War quests only.
 - Non-Alliance War requests return `BLOCKED`.
 - Full quest detail is required before drafting.
-- Existing submissions must be checked when possible.
+- Latest status, deadline, slots, and existing submissions must be checked when possible.
+- If `/quests/my` is unavailable, ask the user whether they already submitted.
 - Claims require evidence.
-- Final material requires all mandatory rows to be `PASS`.
+- Final material requires truthfulness, logic, and all mandatory requirement rows to be `PASS`.
+- Failed self-check rows must trigger revision and another self-check unless user evidence/action is required.
+- Final material waits for user confirmation.
 - The agent prepares `SubmitAnswer` material only; the user submits.
 - The agent never calls submit or verify endpoints.

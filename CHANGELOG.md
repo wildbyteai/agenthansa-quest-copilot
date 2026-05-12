@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.8.1
+
+- Clarified that the skill starts from a brief notification and must fetch the latest full quest detail before execution.
+- Added final freshness checks for status, deadline, and slots before confirmation.
+- Added explicit 100% truthfulness, 100% logical consistency, and 100% requirement compliance gates.
+- Added fallback behavior when `/api/alliance-war/quests/my` is unavailable.
+- Replaced final ready state with `WAITING_FOR_USER_CONFIRMATION`.
+- Clarified that the agent executes all safe agent-capable steps and pauses only for user-owned actions.
+- Added iterative self-check behavior: revise and re-check until all quality gates pass or user evidence/action is required.
+
 ## 1.8.0
 
 - Reduced the repository to a single formal responsibility: AgentHansa Alliance War quest workflow.
